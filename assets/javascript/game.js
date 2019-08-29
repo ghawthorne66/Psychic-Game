@@ -1,7 +1,3 @@
-// document.onkeyup = function(){
-//     var userguess = String.fromCharCode(event.keycode).toLowerCase();   
-//     console.log(userguess);
-// }
 var wins  = 0
 var losses = 0
 var guessesLeft = 9
@@ -19,42 +15,41 @@ document.onkeypress = function(evt) {
     handleGuess(currentEnteredLetter); 
 };
 
-function randomLetter(){
-    var random = Math.floor(Math.random() * letters.length); // 0-6 e.g. 5
-    //words[4] --> "five"
-    var  letter = letters[random];
-    return letter; 
-}
-
 function startGame() {
     console.log("Starting game...");
     currentRandomPick = randomLetter();
     console.log("Random letter picked is: " + currentRandomPick);
-    setWins(wins);
-    setLosses(losses);
-    setGuessesLeft(guessesLeft);
-    setGuessesSoFar(guesses);
+    setHTMLWinCount();
+    setHTMLLosses();
+    setHTMLGuessesLeft();
+    setHTMLGuessesSoFar();
 }
 
-function setWins(wins_arg){
+function randomLetter(){
+    var random = Math.floor(Math.random() * letters.length); // 0-6 e.g. 5
+    var  letter = letters[random];
+    return letter; 
+}
+
+function setHTMLWinCount(){
     var wins_element = document.getElementById("wins_count");
-    wins_element.innerHTML = "  " + wins_arg;
+    wins_element.innerHTML = "  " + wins;
 }
-function setLosses(loss_arg){
+function setHTMLLosses(){
     var loss_element = document.getElementById("losses");
-    loss_element.innerHTML= "  " + loss_arg;
+    loss_element.innerHTML= "  " + losses;
 }
-function setGuessesLeft(left_arg){
+function setHTMLGuessesLeft(){
     var left_element = document.getElementById("guesses");
-    left_element.innerHTML= "  " + left_arg;
+    left_element.innerHTML= "  " + guessesLeft;
 }
-function setGuessesSoFar(guesses_arg){
+function setHTMLGuessesSoFar(){
     var guesses_element = document.getElementById("guessessofar");
-    guesses_element.innerHTML= "  " + guesses_arg;
+    guesses_element.innerHTML= "  " + guesses;
 }
 
-function handleGuess (letter_r) {
-    if (letter_r === currentRandomPick){
+function handleGuess () {
+    if (currentEnteredLetter === currentRandomPick){
         handleWin();
     }
     else {
@@ -62,26 +57,29 @@ function handleGuess (letter_r) {
     }
 }
 
-function handleWin(){
-    wins++;
-    reset();
-    setWins(wins);
-    setGuessesLeft(guessesLeft);
-    setGuessesSoFar(guesses);
-}
-
-function reset (){
-    guessesLeft=9;
-    guesses = [];
-}
 function incorrect(){
     guessesLeft--;
     guesses.push(currentEnteredLetter);
-    setGuessesLeft(guessesLeft);
-    setGuessesSoFar(guesses);
+    setHTMLGuessesLeft();
+    setHTMLGuessesSoFar();
     didTheyLoose();
 }
 
+function handleWin(){
+    wins++;
+    reset();
+    setHTMLWinCount(wins);
+    setHTMLGuessesLeft();
+    setHTMLGuessesSoFar();
+}
+
+function handleLoss(){
+    losses++;
+    reset();
+    setHTMLGuessesLeft();
+    setHTMLGuessesSoFar();
+    setHTMLLosses();
+}
 
 function didTheyLoose(){
     if (guessesLeft === 0){
@@ -89,12 +87,11 @@ function didTheyLoose(){
     }
 }
 
-function handleLoss(){
-    losses++;
-    reset();
-    setGuessesLeft(guessesLeft);
-    setGuessesSoFar(guesses);
-    setLosses(losses);
+function reset (){
+    guessesLeft=9;
+    guesses = [];
+    currentRandomPick = randomLetter();
+    console.log("New pick is: " + currentRandomPick);
 }
 
 startGame();
