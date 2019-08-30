@@ -86,7 +86,7 @@ function handleWin(){
 }
 
 function handleLoss(){
-    losses++;
+    losses--;
     reset();
     setHTMLGuessesLeft();
     setHTMLGuessesSoFar();
